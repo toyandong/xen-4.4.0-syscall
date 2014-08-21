@@ -2475,6 +2475,31 @@ void vmx_handle_EOI_induced_exit(struct vlapic *vlapic, int vector)
     vlapic_handle_EOI_induced_exit(vlapic, vector);
 }
 
+/* use Xen code to emulated sysenter/syexit */
+static void vmx_vmexit_syscall_intercept(struct cpu_user_regs *regs)
+{
+    struct hvm_emulate_ctxt ctxt;
+    int rc;
+
+    hvm_emulate_prepare(&ctxt, regs);
+
+    rc = hvm_emulate_one(&ctxt);
+
+    switch ( rc )
+    {
+		case X86EMUL_UNHANDLEABLE:
+			hvm_inject_hw_exception(TRAP_invalid_op, HVM_DELIVER_NO_ERROR_CODE);
+			break;
+		case X86EMUL_EXCEPTION:
+			if ( ctxt.exn_pending )
+				hvm_inject_hw_exception(ctxt.exn_vector, ctxt.exn_error_code);
+			/* fall through */
+		default:
+			hvm_emulate_writeback(&ctxt);
+			break;
+    }
+}
+
 void vmx_vmexit_handler(struct cpu_user_regs *regs)
 {
     unsigned long exit_qualification, exit_reason, idtv_info, intr_info = 0;
@@ -2641,6 +2666,139 @@ void vmx_vmexit_handler(struct cpu_user_regs *regs)
                 goto exit_and_crash;
             domain_pause_for_debugger();
             break;
+		
+		case TRAP_gp_fault:
+		{
+			unsigned char inst[4] = {0,0,0,0};	
+			unsigned long sel,  cr0;
+			hvm_copy_from_guest_virt(inst, regs->eip,sizeof(inst),0);
+			printk("		%x %x %x %x \n",inst[0], inst[1], inst[2], inst[3]);
+			printk("=======================================================================\n");
+			__vmread(GUEST_SYSENTER_CS, &sel);
+			printk("[%d %d]GET #GP MSR_CS=[%lx %x] %lx [%lx %x] !!!\n",v->domain->domain_id, current->domain->arch.hvm_domain.mitctl_op.count,
+				  sel, regs->cs,regs->eip, regs->esp, regs->ss);
+			/*
+			printk("		%x %x %x %x \n",inst[0], inst[1], inst[2], inst[3]);
+			printk("INFO  %lx [%lx %lx %lx %lx]  [%lx %lx %lx %lx]  [%lx %lx]  [%lx %lx] [%lx %lx]\n",__vmread(EXCEPTION_BITMAP) ,
+				   __vmread(GUEST_CS_SELECTOR) ,__vmread(GUEST_CS_BASE), __vmread(GUEST_CS_LIMIT),__vmread(GUEST_CS_AR_BYTES),
+				   __vmread(GUEST_SS_SELECTOR) ,__vmread(GUEST_SS_BASE), __vmread(GUEST_SS_LIMIT),__vmread(GUEST_SS_AR_BYTES),
+				   __vmread(GUEST_SYSENTER_EIP) ,__vmread(GUEST_SYSENTER_ESP),
+				   __vmread(GUEST_RIP) ,__vmread(GUEST_RSP), __vmread(VM_ENTRY_INTR_INFO), __vmread(GUEST_RFLAGS)
+				  );
+			
+			printk("INFO [%lx %lx %lx %lx] \n",
+				   __vmread(GUEST_DS_SELECTOR) ,
+				   __vmread(GUEST_ES_SELECTOR) ,
+				   __vmread(GUEST_GS_SELECTOR) ,
+				   __vmread(GUEST_FS_SELECTOR) 
+				  );
+			
+			According to Intel manul to emualted sysenter/sysexit*/
+			__vmread(GUEST_CR0, &cr0);
+			if(current->arch.hvm_vmx.vmx_realmode | !(( cr0 & 0x1))  | hvm_long_mode_enabled(v) )
+			{
+				printk("NOT PT MODE %x %x %x %x %lu\n",inst[0], inst[1], inst[2], inst[3], hvm_long_mode_enabled(v) );
+				hvm_inject_hw_exception(TRAP_gp_fault, regs->error_code);
+				break;
+			}
+			
+			if(inst[0]!= 0x0f)
+			{
+				printk("!!!NOT SYSENTER/SYSEXIT\n");
+				hvm_inject_hw_exception(TRAP_gp_fault, regs->error_code);
+				break;
+			}
+
+			//__vmwrite(GUEST_SYSENTER_CS, 0x60);
+			//vmx_vmexit_syscall_intercept(regs); 
+			//__vmwrite(GUEST_SYSENTER_CS, 0x0);
+			//update_guest_eip();
+			switch(inst[1])
+			{		
+				case 0x34: 
+				{
+					printk("SYSENTER  [%lu]\n", regs->eax);
+					//TODO handle natural exception
+					//ether_handle_syscall(current, regs);
+					//regs->eflags &= ~(EFLG_VM | EFLG_IF | EFLG_RF);
+					//regs->cs = ( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs& 0xfffc);
+					//regs->ss = ( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs& 0xfffc) + 8u;
+					
+					regs->eflags &= ~(X86_EFLAGS_VM | X86_EFLAGS_IF |  X86_EFLAGS_RF);
+					__vmwrite(GUEST_RFLAGS, regs->eflags);
+					
+					__vmwrite(GUEST_CS_SELECTOR,  ( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs));
+					__vmwrite(GUEST_CS_BASE, 0U);
+					__vmwrite(GUEST_CS_LIMIT, ~0U);
+					__vmwrite(GUEST_CS_AR_BYTES, 0xc09b);
+					
+					__vmwrite(GUEST_SS_SELECTOR, (v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs)+8u);
+					__vmwrite(GUEST_SS_BASE, 0U);
+					__vmwrite(GUEST_SS_LIMIT, ~0U);
+					__vmwrite(GUEST_SS_AR_BYTES, 0xc093);
+					
+					 __vmread(GUEST_SYSENTER_EIP,  &regs->eip);
+					 __vmread(GUEST_SYSENTER_ESP,  &regs->esp);
+
+					__vmwrite(GUEST_RIP,  regs->eip);
+					__vmwrite(GUEST_RSP, regs->esp);
+					
+					//usefull?
+					//regs->cs =  __vmread(GUEST_CS_SELECTOR);
+					//regs->ss =  __vmread(GUEST_SS_SELECTOR);
+					
+					break;
+				}
+				case 0x35: 
+				{	
+					printk("SYSEXIT \n");
+					//regs->eflags &= ~(EFLG_RF);
+					//__vmwrite(GUEST_RFLAGS, regs->eflags);
+					//regs->cs = (( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs& 0xfffc)+16U ) | 0x3;
+					//regs->ss = (( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs& 0xfffc)+24U ) | 0x3;
+					
+					__vmwrite(GUEST_CS_SELECTOR,(( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs)+16U ) | 0x3);
+					__vmwrite(GUEST_CS_BASE, 0u);
+					__vmwrite(GUEST_CS_LIMIT, ~0u);
+					__vmwrite(GUEST_CS_AR_BYTES, 0xc0fb);
+					
+					__vmwrite(GUEST_SS_SELECTOR, (( v->domain->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs)+24U ) | 0x3);
+					__vmwrite(GUEST_SS_BASE, 0u);
+					__vmwrite(GUEST_SS_LIMIT, ~0u);
+					__vmwrite(GUEST_SS_AR_BYTES, 0xc0f3);
+
+					regs->eip=regs->edx;
+					regs->esp=regs->ecx;
+					__vmwrite(GUEST_RIP,  regs->eip);
+					__vmwrite(GUEST_RSP, regs->esp);
+					
+					//usefull?
+					//regs->cs =  __vmread(GUEST_CS_SELECTOR);
+					//regs->ss =  __vmread(GUEST_SS_SELECTOR);			
+					//printk("EDX %lx %lx ECX %lx %lx\n", regs->edx,  __vmread(GUEST_CS_SELECTOR)  ,regs->ecx,   __vmread(GUEST_CS_SELECTOR) );
+					break;
+				}
+				default: 
+				{
+					printk("INJECT #GP %x %x %x %x \n",inst[0], inst[1], inst[2], inst[3]);
+					break;
+					vmx_vmexit_syscall_intercept(regs);
+				}
+			}
+			/*
+			printk("Handle %lx [%lx %lx %lx %lx]  [%lx %lx %lx %lx]  [%lx %lx]  [%lx %lx] [%lx %lx]\n",__vmread(EXCEPTION_BITMAP) ,
+				   __vmread(GUEST_CS_SELECTOR) ,__vmread(GUEST_CS_BASE), __vmread(GUEST_CS_LIMIT),__vmread(GUEST_CS_AR_BYTES),
+				   __vmread(GUEST_SS_SELECTOR) ,__vmread(GUEST_SS_BASE), __vmread(GUEST_SS_LIMIT),__vmread(GUEST_SS_AR_BYTES),
+				   __vmread(GUEST_SYSENTER_EIP) ,__vmread(GUEST_SYSENTER_ESP),
+				   __vmread(GUEST_RIP) ,__vmread(GUEST_RSP), __vmread(VM_ENTRY_INTR_INFO),__vmread(GUEST_RFLAGS)
+				  );
+			*/
+			current->domain->arch.hvm_domain.mitctl_op.count++;
+			//if(current->domain->arch.hvm_domain.mitctl_op.count == 19)
+			//__vmwrite(GUEST_SYSENTER_CS, 0x60);
+            break;
+		}
+		
         case TRAP_int3: 
         {
             HVMTRACE_1D(TRAP, vector);

@@ -29,7 +29,7 @@
 #include <asm/page.h>
 #include <public/domctl.h>
 #include <xsm/xsm.h>
-
+#include <asm/hvm/vmx/vmx.h>
 static DEFINE_SPINLOCK(domctl_lock);
 DEFINE_SPINLOCK(vcpu_alloc_lock);
 
@@ -327,7 +327,88 @@ long do_domctl(XEN_GUEST_HANDLE_PARAM(xen_domctl_t) u_domctl)
 
     switch ( op->cmd )
     {
+		case XEN_DOMCTL_mitctl:
+		{
+			struct domain *d;
+			ret = -ESRCH;
+			d = rcu_lock_domain_by_id(op->domain);
+			if(NULL == d)
+				break;
+			ret = -EINVAL;
+			if(!is_hvm_domain(d))
+			{
+				printk("MITCTL: not a hvm domain\n");
+				break;
+			}
 
+			if(d->is_dying || d->is_shutting_down || d->is_shut_down)
+			{
+				printk("MITCTL: domain %d is dying or dead  \n", d->domain_id);
+				break;
+			}
+			printk("pause d\n  ");
+			domain_pause(d);
+
+			switch(op->u.mitctl_op.cmd)
+			{
+				case XEN_DOMCTL_MIT_bind_client:
+				{
+					/*bind evtchn and set shared_mm*/
+					break;
+				}
+				
+				case XEN_DOMCTL_MIT_set_mit_type:
+				{
+					d->arch.hvm_domain.mitctl_op.mit_type = op->u.mitctl_op.mit_type;
+					/*now we have four types can be used to monitor*/
+					switch(op->u.mitctl_op.mit_type)
+					{
+						case HVM_MIT_MTF : break;
+						case HVM_MIT_SYSCALL_no_ring :break;
+						case HVM_MIT_SYSCALL_ring :
+						{
+							struct vcpu   *v;
+							unsigned long bitmap, sel;
+							for_each_vcpu (d, v)
+							{
+								//if ( v != current )	vcpu_pause(v);
+								vmx_vmcs_enter(v);
+								/* prepare to load null segment to CS */
+								 __vmread(GUEST_SYSENTER_CS,  &sel);
+								d->arch.hvm_domain.mitctl_op.imaginary_sysenter_cs  =  sel;
+								d->arch.hvm_domain.mitctl_op.count  =  0;
+								d->arch.hvm_domain.mitctl_op.forced_sysenter_cs = 0x0;
+								/* set Xen to trap #GP */
+								__vmread(EXCEPTION_BITMAP, &bitmap);
+								__vmwrite(EXCEPTION_BITMAP, bitmap | (1U<<TRAP_gp_fault) );
+								__vmread(EXCEPTION_BITMAP, &bitmap);
+								printk("MITCTL: EXCEPTION_BITMAP %lx\n", bitmap);
+								/* load 0x0 to GUEST_SYSENTER_CS, next sysenter/sysexit will trap into Xen  for #GP*/
+								__vmwrite(GUEST_SYSENTER_CS, 0x0);
+								vmx_vmcs_exit(v);
+								//if ( v != current ) vcpu_unpause(v);
+							}
+							break;
+						}
+						case HVM_MIT_LIBVMI :break;
+						default:break;
+					}
+					break;
+				}/*end setmit_time*/
+				
+				case XEN_DOMCTL_MIT_close:
+				{
+					break;
+				}
+				default: break;
+			}
+			
+			
+			printk("unpause d\n");
+			domain_unpause(d); /*cause guest to latch new status*/
+			rcu_unlock_domain(d);
+			break;
+		}
     case XEN_DOMCTL_setvcpucontext:
     {
         vcpu_guest_context_u c = { .nat = NULL };

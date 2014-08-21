@@ -85,7 +85,7 @@
 #define VCPU_nhvm_p2m 2128 /* offsetof(struct vcpu, arch.hvm_vcpu.nvcpu.nv_p2m) */
 #define VCPU_nsvm_hap_enabled 2084 /* offsetof(struct vcpu, arch.hvm_vcpu.nvcpu.u.nsvm.ns_hap_enabled) */
 
-#define DOMAIN_is_32bit_pv 2860 /* offsetof(struct domain, arch.is_32bit_pv) */
+#define DOMAIN_is_32bit_pv 2924 /* offsetof(struct domain, arch.is_32bit_pv) */
 
 #define VMCB_rax 1528 /* offsetof(struct vmcb_struct, rax) */
 #define VMCB_rip 1400 /* offsetof(struct vmcb_struct, rip) */

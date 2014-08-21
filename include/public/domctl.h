@@ -896,6 +896,51 @@ struct xen_domctl_cacheflush {
 typedef struct xen_domctl_cacheflush xen_domctl_cacheflush_t;
 DEFINE_XEN_GUEST_HANDLE(xen_domctl_cacheflush_t);
 
+/*params of XEN_DOMCTL_mitctl*/
+#define XEN_DOMCTL_MIT_bind_client	0
+#define XEN_DOMCTL_MIT_set_mit_type	1
+#define XEN_DOMCTL_MIT_close	2
+
+/* type of mitctl*/
+#define  HVM_MIT_MTF 0
+#define  HVM_MIT_SYSCALL_no_ring 1
+#define  HVM_MIT_SYSCALL_ring 2
+#define  HVM_MIT_LIBVMI 3
+
+
+/* the base info of communication between Dom0 and Xen*/
+struct mitctl_communication
+{
+	void * shared_page_ptr;	/*pointer to va of the shared page*/
+	unsigned long shared_page_mfn;	/*mfn of the shared page, Used by dom0 to map it*/
+	int domid_source;	/*which domain to monitor and introspect*/
+    uint32_t mitctl_channel_port;	/*event port , communication with domain*/
+
+};
+
+/*be added into domain->arch.hvm_domain, so we can get mit info easy*/
+struct mitctl_info_t 
+{
+	struct mitctl_communication mitctl_comm;
+	uint64_t forced_sysenter_cs;
+	uint64_t forced_sysenter_eip;
+	uint64_t imaginary_sysenter_cs;
+	uint64_t imaginary_sysenter_eip;
+	int mit_type;
+	int count;  /*  can be removed */
+};
+
+
+struct xen_domctl_mitctl
+{
+	uint32_t cmd; /*0 1 2*/
+	int mit_type;
+	struct mitctl_communication mitctl_comm;
+	int on_or_off;
+};
+typedef struct xen_domctl_mitctl xen_domctl_mitctl_t;
+DEFINE_XEN_GUEST_HANDLE(xen_domctl_mitctl_t);
+
 struct xen_domctl {
     uint32_t cmd;
 #define XEN_DOMCTL_createdomain                   1
@@ -966,6 +1011,7 @@ struct xen_domctl {
 #define XEN_DOMCTL_getnodeaffinity               69
 #define XEN_DOMCTL_set_max_evtchn                70
 #define XEN_DOMCTL_cacheflush                    71
+#define XEN_DOMCTL_mitctl						100  /*yandong*/
 #define XEN_DOMCTL_gdbsx_guestmemio            1000
 #define XEN_DOMCTL_gdbsx_pausevcpu             1001
 #define XEN_DOMCTL_gdbsx_unpausevcpu           1002
@@ -1014,6 +1060,7 @@ struct xen_domctl {
         struct xen_domctl_debug_op          debug_op;
         struct xen_domctl_mem_event_op      mem_event_op;
         struct xen_domctl_mem_sharing_op    mem_sharing_op;
+		struct xen_domctl_mitctl				mitctl_op; /*yandong*/
 #if defined(__i386__) || defined(__x86_64__)
         struct xen_domctl_cpuid             cpuid;
         struct xen_domctl_vcpuextstate      vcpuextstate;

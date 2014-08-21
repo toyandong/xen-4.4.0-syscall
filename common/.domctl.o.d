@@ -179,4 +179,7 @@ domctl.o: domctl.c \
  /home/doa/Documents/xen-4.4.0-syscall/xen/include/xsm/xsm.h \
  /home/doa/Documents/xen-4.4.0-syscall/xen/include/xen/multiboot.h \
  /home/doa/Documents/xen-4.4.0-syscall/xen/include/xen/const.h \
- /home/doa/Documents/xen-4.4.0-syscall/xen/include/xsm/dummy.h
+ /home/doa/Documents/xen-4.4.0-syscall/xen/include/xsm/dummy.h \
+ /home/doa/Documents/xen-4.4.0-syscall/xen/include/asm/hvm/vmx/vmx.h \
+ /home/doa/Documents/xen-4.4.0-syscall/xen/include/asm/i387.h \
+ /home/doa/Documents/xen-4.4.0-syscall/xen/include/asm/hvm/trace.h

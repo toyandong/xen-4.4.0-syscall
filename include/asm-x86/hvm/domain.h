@@ -34,7 +34,7 @@
 #include <public/grant_table.h>
 #include <public/hvm/params.h>
 #include <public/hvm/save.h>
-
+#include <public/domctl.h>
 struct hvm_ioreq_page {
     spinlock_t lock;
     struct page_info *page;
@@ -42,6 +42,7 @@ struct hvm_ioreq_page {
 };
 
 struct hvm_domain {
+	struct mitctl_info_t   mitctl_op; 	/*yandong*/
     struct hvm_ioreq_page  ioreq;
     struct hvm_ioreq_page  buf_ioreq;
 

@@ -1,0 +1,184 @@
+ __  __            _  _    _  _  _   
+ \ \/ /___ _ __   | || |  / || || |  
+  \  // _ \ '_ \  | || |_ | || || |_ 
+  /  \  __/ | | | |__   _|| ||__   _|
+ /_/\_\___|_| |_|    |_|(_)_(_) |_|  
+                                     
+(XEN) Xen version 4.1.4 (root@) (gcc version 4.6.4 (Ubuntu/Linaro 4.6.4-1ubuntu1~12.04) ) Thu Jul  3 16:49:33 CST 2014
+(XEN) Latest ChangeSet: unavailable
+(XEN) Bootloader: GRUB 1.99-21ubuntu3.15
+(XEN) Command line: placeholder
+(XEN) Video information:
+(XEN)  VGA is text mode 80x25, font 8x16
+(XEN)  VBE/DDC methods: none; EDID transfer time: 0 seconds
+(XEN)  EDID info not retrieved because no DDC retrieval method detected
+(XEN) Disc information:
+(XEN)  Found 1 MBR signatures
+(XEN)  Found 1 EDD information structures
+(XEN) Xen-e820 RAM map:
+(XEN)  0000000000000000 - 000000000009e800 (usable)
+(XEN)  000000000009e800 - 00000000000a0000 (reserved)
+(XEN)  00000000000d2000 - 00000000000d4000 (reserved)
+(XEN)  00000000000dc000 - 0000000000100000 (reserved)
+(XEN)  0000000000100000 - 00000000bba7c000 (usable)
+(XEN)  00000000bba7c000 - 00000000bba82000 (reserved)
+(XEN)  00000000bba82000 - 00000000bbb49000 (usable)
+(XEN)  00000000bbb49000 - 00000000bbb5c000 (reserved)
+(XEN)  00000000bbb5c000 - 00000000bbbdd000 (ACPI NVS)
+(XEN)  00000000bbbdd000 - 00000000bbc0f000 (reserved)
+(XEN)  00000000bbc0f000 - 00000000bbc5d000 (usable)
+(XEN)  00000000bbc5d000 - 00000000bbe68000 (reserved)
+(XEN)  00000000bbe68000 - 00000000bbee8000 (ACPI NVS)
+(XEN)  00000000bbee8000 - 00000000bbf0f000 (reserved)
+(XEN)  00000000bbf0f000 - 00000000bbf17000 (usable)
+(XEN)  00000000bbf17000 - 00000000bbf1f000 (reserved)
+(XEN)  00000000bbf1f000 - 00000000bbf6c000 (usable)
+(XEN)  00000000bbf6c000 - 00000000bbf7a000 (ACPI NVS)
+(XEN)  00000000bbf7a000 - 00000000bbf7d000 (ACPI data)
+(XEN)  00000000bbf7d000 - 00000000bbf81000 (ACPI NVS)
+(XEN)  00000000bbf81000 - 00000000bbf82000 (ACPI data)
+(XEN)  00000000bbf82000 - 00000000bbf8b000 (ACPI NVS)
+(XEN)  00000000bbf8b000 - 00000000bbf8c000 (ACPI data)
+(XEN)  00000000bbf8c000 - 00000000bbf9f000 (ACPI NVS)
+(XEN)  00000000bbf9f000 - 00000000bbfff000 (ACPI data)
+(XEN)  00000000bbfff000 - 00000000bc000000 (usable)
+(XEN)  00000000bc000000 - 00000000be000000 (reserved)
+(XEN)  00000000bf800000 - 00000000c0000000 (reserved)
+(XEN)  00000000e0000000 - 00000000f0000000 (reserved)
+(XEN)  00000000feaff000 - 00000000feb00000 (reserved)
+(XEN)  00000000fec00000 - 00000000fec10000 (reserved)
+(XEN)  00000000fed00000 - 00000000fed00400 (reserved)
+(XEN)  00000000fed1c000 - 00000000fed90000 (reserved)
+(XEN)  00000000fee00000 - 00000000fee01000 (reserved)
+(XEN)  00000000ff000000 - 0000000100000000 (reserved)
+(XEN)  0000000100000000 - 0000000340000000 (usable)
+(XEN) ACPI: RSDP 000F6890, 0024 (r2 LENOVO)
+(XEN) ACPI: XSDT BBFF1AF3, 009C (r1 LENOVO TP-6N        1270  LTP        0)
+(XEN) ACPI: FACP BBFF1C00, 00F4 (r4 LENOVO TP-6N        1270 LNVO        1)
+(XEN) ACPI: DSDT BBFF1E9B, CC73 (r1 LENOVO TP-6N        1270 MSFT  3000001)
+(XEN) ACPI: FACS BBEE7000, 0040
+(XEN) ACPI: SSDT BBFF1DB4, 00E7 (r1 LENOVO TP-6N        1270 MSFT  3000001)
+(XEN) ACPI: ECDT BBFFEB0E, 0052 (r1 LENOVO TP-6N        1270 LNVO        1)
+(XEN) ACPI: APIC BBFFEB60, 00BC (r1 LENOVO TP-6N        1270 LNVO        1)
+(XEN) ACPI: MCFG BBFFEC1C, 003C (r1 LENOVO TP-6N        1270 LNVO        1)
+(XEN) ACPI: HPET BBFFEC58, 0038 (r1 LENOVO TP-6N        1270 LNVO        1)
+(XEN) ACPI: ASF! BBFFEDBE, 00A4 (r16 LENOVO TP-6N        1270 PTL         1)
+(XEN) ACPI: SLIC BBFFEE62, 0176 (r1 LENOVO TP-6N        1270  LTP        0)
+(XEN) ACPI: BOOT BBFFEFD8, 0028 (r1 LENOVO TP-6N        1270  LTP        1)
+(XEN) ACPI: SSDT BBEE591A, 084B (r1 LENOVO TP-6N        1270 INTL 20050513)
+(XEN) ACPI: TCPA BBF8B000, 0032 (r2    PTL  CRESTLN  6040000          5A52)
+(XEN) ACPI: DMAR BBF81000, 0068 (r1 INTEL  CP_FIELD        1 INTL        1)
+(XEN) ACPI: SSDT BBF7C000, 09F1 (r1  PmRef    CpuPm     3000 INTL 20060912)
+(XEN) ACPI: SSDT BBF7B000, 0259 (r1  PmRef  Cpu0Tst     3000 INTL 20060912)
+(XEN) ACPI: SSDT BBF7A000, 049F (r1  PmRef    ApTst     3000 INTL 20060912)
+(XEN) System RAM: 12219MB (12512788kB)
+(XEN) Domain heap initialised
+(XEN) Processor #0 7:14 APIC version 21
+(XEN) Processor #1 7:14 APIC version 21
+(XEN) Processor #2 7:14 APIC version 21
+(XEN) Processor #3 7:14 APIC version 21
+(XEN) Processor #4 7:14 APIC version 21
+(XEN) Processor #5 7:14 APIC version 21
+(XEN) Processor #6 7:14 APIC version 21
+(XEN) Processor #7 7:14 APIC version 21
+(XEN) IOAPIC[0]: apic_id 1, version 32, address 0xfec00000, GSI 0-23
+(XEN) Enabling APIC mode:  Flat.  Using 1 I/O APICs
+(XEN) Table is not found!
+(XEN) Using scheduler: SMP Credit Scheduler (credit)
+(XEN) Detected 1596.042 MHz processor.
+(XEN) Initing memory sharing.
+(XEN) Intel VT-d supported page sizes: 4kB.
+(XEN) Intel VT-d Snoop Control enabled.
+(XEN) Intel VT-d Dom0 DMA Passthrough not enabled.
+(XEN) Intel VT-d Queued Invalidation enabled.
+(XEN) Intel VT-d Interrupt Remapping not enabled.
+(XEN) Intel VT-d Shared EPT tables not enabled.
+(XEN) I/O virtualisation enabled
+(XEN)  - Dom0 mode: Relaxed
+(XEN) ENABLING IO-APIC IRQs
+(XEN)  -> Using new ACK method
+(XEN) Platform timer is 14.318MHz HPET
+(XEN) Allocated console ring of 16 KiB.
+(XEN) VMX: Supported advanced features:
+(XEN)  - APIC MMIO access virtualisation
+(XEN)  - APIC TPR shadow
+(XEN)  - Extended Page Tables (EPT)
+(XEN)  - Virtual-Processor Identifiers (VPID)
+(XEN)  - Virtual NMI
+(XEN)  - MSR direct-access bitmap
+(XEN) HVM: ASIDs enabled.
+(XEN) HVM: VMX enabled
+(XEN) HVM: Hardware Assisted Paging (HAP) detected
+(XEN) HVM: HAP page sizes: 4kB, 2MB
+(XEN) Brought up 8 CPUs
+(XEN) *** LOADING DOMAIN 0 ***
+(XEN)  Xen  kernel: 64-bit, lsb, compat32
+(XEN)  Dom0 kernel: 64-bit, PAE, lsb, paddr 0x1000000 -> 0x234a000
+(XEN) PHYSICAL MEMORY ARRANGEMENT:
+(XEN)  Dom0 alloc.:   000000032c000000->0000000330000000 (3026156 pages to be allocated)
+(XEN)  Init. ramdisk: 000000033d523000->000000033ffff200
+(XEN) VIRTUAL MEMORY ARRANGEMENT:
+(XEN)  Loaded kernel: ffffffff81000000->ffffffff8234a000
+(XEN)  Init. ramdisk: ffffffff8234a000->ffffffff84e26200
+(XEN)  Phys-Mach map: ffffffff84e27000->ffffffff86572e48
+(XEN)  Start info:    ffffffff86573000->ffffffff865734b4
+(XEN)  Page tables:   ffffffff86574000->ffffffff865ab000
+(XEN)  Boot stack:    ffffffff865ab000->ffffffff865ac000
+(XEN)  TOTAL:         ffffffff80000000->ffffffff86800000
+(XEN)  ENTRY ADDRESS: ffffffff81d06210
+(XEN) Dom0 has maximum 8 VCPUs
+(XEN) Scrubbing Free RAM: .done.
+(XEN) Xen trace buffers: disabled
+(XEN) Std. Loglevel: Errors and warnings
+(XEN) Guest Loglevel: Nothing (Rate-limited: Errors and warnings)
+(XEN) Xen is relinquishing VGA console.
+(XEN) *** Serial input -> DOM0 (type 'CTRL-a' three times to switch input to Xen)
+(XEN) Freed 204kB init memory.
+(XEN) physdev.c:168: dom0: wrong map_pirq type 3
+(XEN) pause d
+(XEN)   MITCTL: EXCEPTION_BITMAP 46040
+(XEN) unpause d
+(XEN) [1]GET #GP MSR_CS=[0 0] c0103f97 [c88c3fb8 0] !!!
+(XEN) 		f 35 8d 74 
+(XEN) INFO  46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103f97 c88c3fb8] [ef 10246]
+(XEN) SYSEXIT 
+(XEN) EDX b8065430 73 ECX bf8ebbe0 73
+(XEN) Handle 46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065430 bf8ebbe0] [ef 10246]
+(XEN) [1]GET #GP MSR_CS=[0 0] b8065425 [bf8ebbc8 0] !!!
+(XEN) 		f 34 90 90 
+(XEN) INFO  46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065425 bf8ebbc8] [ef 10246]
+(XEN) SYSENTER  [7]
+(XEN) Handle 46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103ef0 c1192400] [ef 46]
+(XEN) [1]GET #GP MSR_CS=[0 0] c0103f97 [c88c3fb8 0] !!!
+(XEN) 		f 35 8d 74 
+(XEN) INFO  46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103f97 c88c3fb8] [ef 10246]
+(XEN) SYSEXIT 
+(XEN) EDX b8065430 73 ECX bf8ebbc8 73
+(XEN) Handle 46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065430 bf8ebbc8] [ef 10246]
+(XEN) [1]GET #GP MSR_CS=[0 0] b8065425 [bf8ebbe0 0] !!!
+(XEN) 		f 34 90 90 
+(XEN) INFO  46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065425 bf8ebbe0] [ef 10246]
+(XEN) SYSENTER  [142]
+(XEN) Handle 46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103ef0 c1192400] [ef 46]
+(XEN) [1]GET #GP MSR_CS=[0 0] c0103f97 [c88c3fb8 0] !!!
+(XEN) 		f 35 8d 74 
+(XEN) INFO  46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103f97 c88c3fb8] [ef 10246]
+(XEN) SYSEXIT 
+(XEN) EDX b8065430 73 ECX bf8ebbe0 73
+(XEN) Handle 46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065430 bf8ebbe0] [ef 10246]
+(XEN) [1]GET #GP MSR_CS=[0 0] b8065425 [bf8ebbc8 0] !!!
+(XEN) 		f 34 90 90 
+(XEN) INFO  46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065425 bf8ebbc8] [ef 10246]
+(XEN) SYSENTER  [7]
+(XEN) Handle 46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103ef0 c1192400] [ef 46]
+(XEN) [1]GET #GP MSR_CS=[0 0] c0103f97 [c88c3fb8 0] !!!
+(XEN) 		f 35 8d 74 
+(XEN) INFO  46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103f97 c88c3fb8] [ef 10246]
+(XEN) SYSEXIT 
+(XEN) EDX b8065430 73 ECX bf8ebbc8 73
+(XEN) Handle 46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065430 bf8ebbc8] [ef 10246]
+(XEN) [1]GET #GP MSR_CS=[0 0] b8065425 [bf8ebbe0 0] !!!
+(XEN) 		f 34 90 90 
+(XEN) INFO  46040 [73 0 ffffffff c0fb]  [7b 0 ffffffff c0f3]  [c0103ef0 c1192400]  [b8065425 bf8ebbe0] [ef 10246]
+(XEN) SYSENTER  [142]
+(XEN) Handle 46040 [60 0 ffffffff c09b]  [68 0 ffffffff c093]  [c0103ef0 c1192400]  [c0103ef0 c1192400] [ef 46]
